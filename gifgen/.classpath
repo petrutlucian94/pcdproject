@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/akka-camel_2.10-2.3.10.jar"/>
+	<classpathentry kind="lib" path="lib/akka-actor_2.10-2.3.10.jar"/>
+	<classpathentry kind="lib" path="lib/config-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/akka-slf4j_2.10-2.3.10.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="lib/camel-core-2.10.3.jar"/>
+	<classpathentry kind="lib" path="lib/camel-jetty-2.10.3.jar"/>
+	<classpathentry kind="lib" path="lib/camel-http-2.10.3.jar"/>
+	<classpathentry kind="lib" path="lib/geronimo-servlet_2.5_spec-1.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-server-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-continuation-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-http-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-io-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-security-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-servlet-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-servlets-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-client-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-jmx-7.5.4.v20111024.jar"/>
+	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
+	<classpathentry kind="lib" path="lib/logback-classic-1.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/logback-core-1.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/scala-library.jar"/>
+	<classpathentry kind="lib" path="lib/jarchivelib-0.7.0-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="lib/tika-core-1.8.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commons-compress-1.9.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
