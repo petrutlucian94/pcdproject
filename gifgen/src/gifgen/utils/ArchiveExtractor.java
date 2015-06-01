@@ -9,57 +9,57 @@ import org.rauschig.jarchivelib.CompressionType;
 
 
 public class ArchiveExtractor {
-	private String fname;
+    private String fname;
 
-	public ArchiveExtractor(String fname){
-		this.fname = fname;
-	}
+    public ArchiveExtractor(String fname){
+        this.fname = fname;
+    }
 
-	public void extract(String dest) throws IOException{
-		get_archiver().extract(new File(fname),
-				               new File(dest));
-	}
+    public void extract(String dest) throws IOException{
+        get_archiver().extract(new File(fname),
+                               new File(dest));
+    }
 
-	private Archiver get_archiver(){
-		String mime_type = MimeTypeDetector.get_mime_type(fname);
-		CompressionType compr_type = get_compression_type(mime_type);
-		ArchiveFormat arch_format = get_archive_format(mime_type);
-		if (compr_type != null){
-			return ArchiverFactory.createArchiver(arch_format, compr_type);
-		} else {
-			return ArchiverFactory.createArchiver(arch_format);
-		}
-	}
-	
-	private CompressionType get_compression_type(String mime_type) {
-		CompressionType comprType = null;
-		switch(mime_type){
-		case "application/gzip":
-			comprType = CompressionType.GZIP;
-			break;
-		case "application/bzip2":
-			comprType = CompressionType.BZIP2;
-			break;
-		case "application/x-xz":
-			comprType = CompressionType.XZ;
-			break;
-		}
-		return comprType;
-	}
+    private Archiver get_archiver() throws IOException{
+        String mime_type = MimeTypeDetector.get_mime_type(fname);
+        CompressionType compr_type = get_compression_type(mime_type);
+        ArchiveFormat arch_format = get_archive_format(mime_type);
+        if (compr_type != null){
+            return ArchiverFactory.createArchiver(arch_format, compr_type);
+        } else {
+            return ArchiverFactory.createArchiver(arch_format);
+        }
+    }
+    
+    private CompressionType get_compression_type(String mime_type) {
+        CompressionType comprType = null;
+        switch(mime_type){
+        case "application/gzip":
+            comprType = CompressionType.GZIP;
+            break;
+        case "application/bzip2":
+            comprType = CompressionType.BZIP2;
+            break;
+        case "application/x-xz":
+            comprType = CompressionType.XZ;
+            break;
+        }
+        return comprType;
+    }
 
-	private ArchiveFormat get_archive_format(String mime_type){
-		ArchiveFormat archFormat = ArchiveFormat.ZIP;
-		switch(mime_type){
-		case "application/x-tar":
-			archFormat = ArchiveFormat.TAR;
-			break;
-		case "application/zip":
-			archFormat = ArchiveFormat.ZIP;
-			break;
-		case "application/x-7z-compressed":
-			archFormat = ArchiveFormat.SEVEN_Z;
-			break;
-		}
-		return archFormat;
-	}
+    private ArchiveFormat get_archive_format(String mime_type){
+        ArchiveFormat archFormat = ArchiveFormat.ZIP;
+        switch(mime_type){
+        case "application/x-tar":
+            archFormat = ArchiveFormat.TAR;
+            break;
+        case "application/zip":
+            archFormat = ArchiveFormat.ZIP;
+            break;
+        case "application/x-7z-compressed":
+            archFormat = ArchiveFormat.SEVEN_Z;
+            break;
+        }
+        return archFormat;
+    }
 }

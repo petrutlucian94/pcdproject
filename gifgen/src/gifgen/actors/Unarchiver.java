@@ -11,34 +11,32 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 public class Unarchiver extends UntypedActor {
-	private ActorRef gifGenerator;
-	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+    private ActorRef gifGenerator;
+    LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
-	public Unarchiver(ActorRef gifGenerator) {
-		this.gifGenerator = gifGenerator;
-	}
+    public Unarchiver(ActorRef gifGenerator) {
+        this.gifGenerator = gifGenerator;
+    }
 
-	@Override
-	public void onReceive(Object msg) throws IOException {
-		log.warning("Unarchiver got the message");
-		CamelMessage message = (CamelMessage) msg;
-		String uploadPath = message.body().toString();
-		String imageDir = getImageDir(uploadPath);
-		log.warning(uploadPath);
-		unarchive(uploadPath, imageDir);
-		message = CamelMessageUtils.setBody(message, imageDir);
-		gifGenerator.forward(message, getContext());
-	}
+    @Override
+    public void onReceive(Object msg) throws IOException {
+        CamelMessage message = (CamelMessage) msg;
+        String uploadPath = message.body().toString();
+        String imageDir = getImageDir(uploadPath);
+        unarchive(uploadPath, imageDir);
+        message = CamelMessageUtils.setBody(message, imageDir);
+        gifGenerator.forward(message, getContext());
+    }
 
-	private String getImageDir(String uploadPath){
-		String[] split = uploadPath.split("/");
-		String fname = split[split.length - 1];
-		String imageDir = Config.imageDir + fname;
-		return imageDir;
-	}
-	
-	private void unarchive(String src, String dest) throws IOException{
-		ArchiveExtractor extractor = new ArchiveExtractor(src);
-		extractor.extract(dest);
-	}
+    private String getImageDir(String uploadPath){
+        String[] split = uploadPath.split("/");
+        String fname = split[split.length - 1];
+        return Config.imageDir + fname;
+    }
+    
+    private void unarchive(String src, String dest) throws IOException{
+        log.debug("Unarchiving " + src);
+        ArchiveExtractor extractor = new ArchiveExtractor(src);
+        extractor.extract(dest);
+    }
 }
