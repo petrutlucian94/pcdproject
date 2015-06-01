@@ -6,38 +6,13 @@ import org.rauschig.jarchivelib.ArchiveFormat;
 import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 import org.rauschig.jarchivelib.CompressionType;
-import org.apache.tika.detect.DefaultDetector;
-import org.apache.tika.detect.Detector;
-import org.apache.tika.io.TikaInputStream;
-import org.apache.tika.metadata.Metadata;
+
 
 public class ArchiveExtractor {
 	private String fname;
-	
-	private static final Detector DETECTOR = new DefaultDetector();
 
 	public ArchiveExtractor(String fname){
 		this.fname = fname;
-	}
-
-	private String get_mime_type(){
-		TikaInputStream tikaIS = null;
-	    try {
-	        tikaIS = TikaInputStream.get(new File(fname));
-	        final Metadata metadata = new Metadata();
-	        return DETECTOR.detect(tikaIS, metadata).toString();
-	    } catch (IOException e) {
-	    	e.printStackTrace();
-			return e.getMessage();
-		} finally {
-	        if (tikaIS != null) {
-	            try {
-					tikaIS.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	        }
-	    }
 	}
 
 	public void extract(String dest){
@@ -50,7 +25,7 @@ public class ArchiveExtractor {
 	}
 
 	private Archiver get_archiver(){
-		String mime_type = get_mime_type();
+		String mime_type = MimeTypeDetector.get_mime_type(fname);
 		CompressionType compr_type = get_compression_type(mime_type);
 		ArchiveFormat arch_format = get_archive_format(mime_type);
 		if (compr_type != null){

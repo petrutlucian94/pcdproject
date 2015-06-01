@@ -1,6 +1,7 @@
 package gifgen.actors;
 import gifgen.Config;
 import gifgen.utils.ArchiveExtractor;
+import gifgen.utils.CamelMessageUtils;
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import akka.camel.CamelMessage;
@@ -20,14 +21,20 @@ public class Unarchiver extends UntypedActor {
 		log.warning("Unarchiver got the message");
 		CamelMessage message = (CamelMessage) msg;
 		String uploadPath = message.body().toString();
+		String imageDir = getImageDir(uploadPath);
+		log.warning(uploadPath);
+		unarchive(uploadPath, imageDir);
+		message = CamelMessageUtils.setBody(message, imageDir);
+		gifGenerator.forward(message, getContext());
+	}
+
+	private String getImageDir(String uploadPath){
 		String[] split = uploadPath.split("/");
 		String fname = split[split.length - 1];
 		String imageDir = Config.imageDir + fname;
-		log.warning(uploadPath);
-		unarchive(uploadPath, imageDir);
-		gifGenerator.forward(msg, getContext());
+		return imageDir;
 	}
-
+	
 	private void unarchive(String src, String dest){
 		ArchiveExtractor extractor = new ArchiveExtractor(src);
 		extractor.extract(dest);

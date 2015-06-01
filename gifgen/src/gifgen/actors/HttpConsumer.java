@@ -1,16 +1,16 @@
 package gifgen.actors;
 
 import gifgen.Config;
+import gifgen.utils.CamelMessageUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.camel.converter.stream.FileInputStreamCache;
+import org.apache.camel.StreamCache;
 
 import akka.actor.ActorRef;
 import akka.camel.CamelMessage;
 import akka.camel.javaapi.UntypedConsumerActor;
-import akka.dispatch.Mapper;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
@@ -34,14 +34,9 @@ public class HttpConsumer extends UntypedConsumerActor {
 	public void onReceive(Object msg) {
 		CamelMessage message = (CamelMessage) msg;
 		String uploadPath = getUploadPath();
-		log.warning(">>>>> Upload Path: " + uploadPath);
 		saveBody(message, uploadPath);
-		message = setBody(message, uploadPath);
-		log.warning(">>>>Body updated");
-		
+		message = CamelMessageUtils.setBody(message, uploadPath);
 		unarchiver.forward(message, getContext());
-		log.warning(">>>>Message forwarder");
-		// getSender().tell("File recieved", getSelf());
 	}
 
 	private String getUploadPath(){
@@ -50,8 +45,8 @@ public class HttpConsumer extends UntypedConsumerActor {
 	}
 
 	private void saveBody(CamelMessage message, String path){
-		FileInputStreamCache bodyStream = message.getBodyAs(FileInputStreamCache.class,
-															getCamelContext());
+		StreamCache bodyStream = message.getBodyAs(StreamCache.class,
+												   getCamelContext());
 		try {
 			FileOutputStream fstream = new FileOutputStream(path);
 			bodyStream.writeTo(fstream);
@@ -61,15 +56,5 @@ public class HttpConsumer extends UntypedConsumerActor {
 					+ ex.getMessage(), getSelf());
 			return;
 		}
-	}
-
-	private CamelMessage setBody(CamelMessage message, String new_body){
-		CamelMessage replacedMessage = message.mapBody(new Mapper<Object, String>() {
-	        @Override
-	        public String apply(Object body) {
-	          return new_body;
-	        }
-	      });
-		return replacedMessage;
 	}
 }
