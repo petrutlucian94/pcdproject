@@ -1,7 +1,6 @@
 package gifgen;
 
 import gifgen.actors.*;
-import gifgen.utils.ExecUtils;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;

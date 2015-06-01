@@ -16,7 +16,6 @@ public class ImageUtils {
 	}
 
 	public static List<String> get_images(String dirPath){
-		System.out.println(">>>Dir path" + dirPath);
 		List<String> images = new ArrayList<String>();
 		File fDir = new File(dirPath);
 		ArrayList<File> contents = new ArrayList<File>(Arrays.asList(fDir.listFiles()));
@@ -28,7 +27,7 @@ public class ImageUtils {
 		return images;
 	}
 
-	public static void resizeImage(String imagePath, int xres, int yres){
+	public static void resizeImage(String imagePath, int xres, int yres) throws Exception{
 		String normImagPath = imagePath.replace("/", "\\");
 		String bin = Config.imagickLocation.replace("/", "\\") + "convert";
 		String cmd = String.format("%s %s -resize %dx%d! %s",
@@ -39,7 +38,7 @@ public class ImageUtils {
 		ExecUtils.executeCommand(cmd);
 	}
 
-	public static void generateGif(List<String> srcImages, String destGif){
+	public static void generateGif(List<String> srcImages, String destGif) throws Exception{
 		String bin = Config.imagickLocation.replace("/", "\\") + "convert";
 		StringBuffer cmd = new StringBuffer(bin);
 		String opts = String.format("-delay %d -size %dx%d -loop 0",

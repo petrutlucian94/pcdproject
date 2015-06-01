@@ -15,13 +15,9 @@ public class ArchiveExtractor {
 		this.fname = fname;
 	}
 
-	public void extract(String dest){
-		Archiver archiver = get_archiver();
-		try {
-			archiver.extract(new File(fname), new File(dest));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void extract(String dest) throws IOException{
+		get_archiver().extract(new File(fname),
+				               new File(dest));
 	}
 
 	private Archiver get_archiver(){

@@ -13,7 +13,7 @@ import akka.camel.CamelMessage;
 
 public class GifGenerator extends UntypedActor {
 	@Override
-	public void onReceive(Object msg) {
+	public void onReceive(Object msg) throws Exception {
 		CamelMessage message = (CamelMessage) msg;
 		String imageDir = message.body().toString();
 		String gifPath = getGifPath(imageDir);
@@ -23,7 +23,7 @@ public class GifGenerator extends UntypedActor {
 		getSender().tell(getGif(gifPath), getSelf());
 	}
 
-	private void resize_images(List<String> imagePaths){
+	private void resize_images(List<String> imagePaths) throws Exception{
 		for (String imagePath: imagePaths){
 			ImageUtils.resizeImage(imagePath, Config.gif_x_res, Config.gif_y_res);
 		}
@@ -36,15 +36,9 @@ public class GifGenerator extends UntypedActor {
 		return gifPath;
 	}
 
-	private byte[] getGif(String gifPath){
+	private byte[] getGif(String gifPath) throws IOException{
 		Path path = Paths.get(gifPath);
-		byte[] data = null;
-		try {
-			data = Files.readAllBytes(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		byte[] data = Files.readAllBytes(path);
 		return data;
 	}
 }

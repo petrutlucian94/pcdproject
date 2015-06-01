@@ -6,21 +6,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class ExecUtils {
-	public static String executeCommand(String command) {
+	public static String executeCommand(String command) throws Exception {
 		System.out.println("Executing command: " + command);
 		StringBuffer stdOut = new StringBuffer();
 		StringBuffer stdErr = new StringBuffer();
-		Process p;
-		try {
-			p = Runtime.getRuntime().exec(command);
-			p.waitFor();
-			stdOut = getInputStream(p.getInputStream());
-			stdErr = getInputStream(p.getErrorStream());
-		} catch (Exception e) {
-			e.printStackTrace();
+		Process p = Runtime.getRuntime().exec(command);
+		p.waitFor();
+		stdOut = getInputStream(p.getInputStream());
+		stdErr = getInputStream(p.getErrorStream());
+		if (stdErr.length() > 0){
+			String excMessage = "Executing command " + command +
+					            "failed. StdErr: " + stdErr;
+			throw new Exception(excMessage);
 		}
-		System.out.println("Got stdout: " + stdOut.toString());
-		System.out.println("Got stderr: " + stdErr.toString());
 		return stdOut.toString();
  
 	}
