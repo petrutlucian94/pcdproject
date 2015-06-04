@@ -1,6 +1,7 @@
 package gifgen.utils;
 
 import gifgen.Config;
+import gifgen.exception.ImageOperationException;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,13 +11,19 @@ import java.util.List;
 
 
 public class ImageUtils {
-    public static boolean is_image(String path) throws IOException{
-        String mime_type = MimeTypeDetector.get_mime_type(path);
+    public static boolean is_image(String path) throws ImageOperationException{
+        String mime_type;
+		try {
+			mime_type = MimeTypeDetector.get_mime_type(path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new ImageOperationException(e);
+		}
         String[] split = mime_type.split("/");
         return split[0].equals("image");
     }
 
-    public static List<String> get_images(String dirPath) throws IOException{
+    public static List<String> get_images(String dirPath) throws ImageOperationException{
         List<String> images = new ArrayList<String>();
         File fDir = new File(dirPath);
         ArrayList<File> contents = new ArrayList<File>(Arrays.asList(fDir.listFiles()));
@@ -28,16 +35,22 @@ public class ImageUtils {
         return images;
     }
 
-    public static void resizeImage(String imagePath, int xres, int yres) throws Exception{
+    public static void resizeImage(String imagePath, int xres, int yres) throws ImageOperationException{
         String normImagPath = imagePath.replace("/", "\\");
         String bin = Config.imagickLocation.replace("/", "\\") + "convert";
         String cmd = String.format("%s %s -resize %dx%d! %s",
                                    bin, normImagPath, Config.gif_x_res,
                                    Config.gif_y_res, normImagPath);
-        ExecUtils.executeCommand(cmd);
+        try {
+			ExecUtils.executeCommand(cmd);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new ImageOperationException(e);
+		}
+        
     }
 
-    public static void generateGif(List<String> srcImages, String destGif) throws Exception{
+    public static void generateGif(List<String> srcImages, String destGif) throws ImageOperationException{
         String bin = Config.imagickLocation.replace("/", "\\") + "convert";
         StringBuffer cmd = new StringBuffer(bin);
         String opts = String.format("-delay %d -size %dx%d -loop 0",
@@ -49,6 +62,12 @@ public class ImageUtils {
             cmd.append(" " + pageOpt);
         }
         cmd.append(" " + destGif);
-        ExecUtils.executeCommand(cmd.toString());
+        try {
+			ExecUtils.executeCommand(cmd.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new ImageOperationException(e);
+		}
     }
 }
+
