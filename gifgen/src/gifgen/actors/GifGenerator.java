@@ -7,13 +7,14 @@ import java.nio.file.Paths;
 import java.nio.file.Path;
 
 import gifgen.Config;
+import gifgen.exception.ImageOperationException;
 import gifgen.utils.ImageUtils;
 import akka.actor.UntypedActor;
 import akka.camel.CamelMessage;
 
 public class GifGenerator extends UntypedActor {
     @Override
-    public void onReceive(Object msg) throws Exception {
+    public void onReceive(Object msg) throws ImageOperationException, IOException {
         CamelMessage message = (CamelMessage) msg;
         String imageDir = message.body().toString();
         String gifPath = getGifPath(imageDir);
@@ -25,7 +26,7 @@ public class GifGenerator extends UntypedActor {
         getSender().tell(getGif(gifPath), getSelf());
     }
 
-    private void resize_images(List<String> imagePaths) throws Exception{
+    private void resize_images(List<String> imagePaths) throws ImageOperationException{
         for (String imagePath: imagePaths){
             ImageUtils.resizeImage(imagePath,
                                    Config.gif_x_res,

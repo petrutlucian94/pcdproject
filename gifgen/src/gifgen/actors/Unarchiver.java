@@ -1,7 +1,7 @@
 package gifgen.actors;
-import java.io.IOException;
 
 import gifgen.Config;
+import gifgen.exception.ArchiverException;
 import gifgen.utils.ArchiveExtractor;
 import gifgen.utils.CamelMessageUtils;
 import akka.actor.ActorRef;
@@ -19,7 +19,7 @@ public class Unarchiver extends UntypedActor {
     }
 
     @Override
-    public void onReceive(Object msg) throws IOException {
+    public void onReceive(Object msg) throws ArchiverException {
         CamelMessage message = (CamelMessage) msg;
         String uploadPath = message.body().toString();
         String imageDir = getImageDir(uploadPath);
@@ -33,8 +33,8 @@ public class Unarchiver extends UntypedActor {
         String fname = split[split.length - 1];
         return Config.imageDir + fname;
     }
-    
-    private void unarchive(String src, String dest) throws IOException{
+
+    private void unarchive(String src, String dest) throws ArchiverException{
         log.debug("Unarchiving " + src);
         ArchiveExtractor extractor = new ArchiveExtractor(src);
         extractor.extract(dest);

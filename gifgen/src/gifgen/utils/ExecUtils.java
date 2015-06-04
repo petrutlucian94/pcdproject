@@ -13,44 +13,37 @@ public class ExecUtils {
         StringBuffer stdErr = new StringBuffer();
 
         Process p;
-		try {
-			p = Runtime.getRuntime().exec(command);
-			 try {
-				p.waitFor();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				throw new CommandExecutionException(e);
-			}
-		        stdOut = getInputStream(p.getInputStream());
-		        stdErr = getInputStream(p.getErrorStream());
+        try {
+            p = Runtime.getRuntime().exec(command);
+            p.waitFor();
 
-		        if (stdErr.length() > 0){
-		            String excMessage = "Executing command " + command +
-		                                "failed. StdErr: " + stdErr;
-		            throw new CommandExecutionException(excMessage);
-		        }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			throw new CommandExecutionException(e);
-		}
-       
+            stdOut = getInputStream(p.getInputStream());
+            stdErr = getInputStream(p.getErrorStream());
+
+            if (stdErr.length() > 0){
+                String excMessage = "Executing command " + command +
+                                    "failed. StdErr: " + stdErr;
+                throw new CommandExecutionException(excMessage);
+            }
+        } catch (IOException|InterruptedException e) {
+            throw new CommandExecutionException(e);
+        }
+
         return stdOut.toString();
- 
     }
 
     public static StringBuffer getInputStream(InputStream inputStream) throws CommandExecutionException{
         StringBuffer output = new StringBuffer();
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(inputStream));
-        String line = "";            
+        String line = "";
         try {
-			while ((line = reader.readLine())!= null) {
-			    output.append(line + "\n");
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			throw new CommandExecutionException(e);
-		}
+            while ((line = reader.readLine())!= null) {
+                output.append(line + "\n");
+            }
+        } catch (IOException e) {
+            throw new CommandExecutionException(e);
+        }
         return output;
     }
 }

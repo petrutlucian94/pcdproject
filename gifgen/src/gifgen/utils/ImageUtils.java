@@ -1,6 +1,7 @@
 package gifgen.utils;
 
 import gifgen.Config;
+import gifgen.exception.CommandExecutionException;
 import gifgen.exception.ImageOperationException;
 
 import java.io.File;
@@ -13,12 +14,11 @@ import java.util.List;
 public class ImageUtils {
     public static boolean is_image(String path) throws ImageOperationException{
         String mime_type;
-		try {
-			mime_type = MimeTypeDetector.get_mime_type(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			throw new ImageOperationException(e);
-		}
+        try {
+            mime_type = MimeTypeDetector.get_mime_type(path);
+        } catch (IOException e) {
+            throw new ImageOperationException(e);
+        }
         String[] split = mime_type.split("/");
         return split[0].equals("image");
     }
@@ -42,12 +42,10 @@ public class ImageUtils {
                                    bin, normImagPath, Config.gif_x_res,
                                    Config.gif_y_res, normImagPath);
         try {
-			ExecUtils.executeCommand(cmd);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw new ImageOperationException(e);
-		}
-        
+            ExecUtils.executeCommand(cmd);
+        } catch (CommandExecutionException e) {
+            throw new ImageOperationException(e);
+        }
     }
 
     public static void generateGif(List<String> srcImages, String destGif) throws ImageOperationException{
@@ -63,11 +61,10 @@ public class ImageUtils {
         }
         cmd.append(" " + destGif);
         try {
-			ExecUtils.executeCommand(cmd.toString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw new ImageOperationException(e);
-		}
+            ExecUtils.executeCommand(cmd.toString());
+        } catch (CommandExecutionException e) {
+            throw new ImageOperationException(e);
+        }
     }
 }
 
